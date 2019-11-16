@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class AnimalBehavior : MonoBehaviour
+public class Animal_Behavior : MonoBehaviour
 {
     //behavior
     public bool herbavor;
@@ -24,6 +24,9 @@ public class AnimalBehavior : MonoBehaviour
     private Transform target;
     public Rigidbody rb;
     public Transform transform;
+    //self
+    public GameObject self;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -64,6 +67,11 @@ public class AnimalBehavior : MonoBehaviour
                 Vector3 direction = (target.position - transform.position).normalized;
                 rb.MovePosition(transform.position + direction * speed * Time.deltaTime);
             }
+        }
+
+        if (lifeCounter >= 400)
+        {
+            Destroy(self);
         }
     }
     void countingVariables()
