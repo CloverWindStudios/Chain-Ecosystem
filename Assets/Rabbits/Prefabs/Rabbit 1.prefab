@@ -775,7 +775,6 @@ MonoBehaviour:
   hunger: 0
   thirst: 0
   health: 0
-  fear: 0
   type: 1
   lifeTimeWhole: 100
   lifeTimeHalf: 50

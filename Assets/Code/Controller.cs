@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class NewBehaviourScript : MonoBehaviour
+public class Controller : MonoBehaviour
 {
     public bool bunnyExist;
     public bool birdExist;
@@ -11,34 +11,40 @@ public class NewBehaviourScript : MonoBehaviour
     public GameObject bunnyObj;
     public GameObject birdObj;
     public GameObject catObj;
-    public GameObject squirrleObj;
+    public GameObject squirrelObj;
     // Start is called before the first frame update
     void Start()
     {
         if (bunnyExist)
         {
-            Instantiate(bunnyObj);
-            Instantiate(bunnyObj);
+            SpawnAnimal(bunnyObj);
+            SpawnAnimal(bunnyObj);
         }
         if (birdExist)
         {
-            Instantiate(birdObj);
-            Instantiate(birdObj);
+            SpawnAnimal(birdObj);
+            SpawnAnimal(birdObj);
         }
         if (catExist)
         {
-            Instantiate(catObj);
-            Instantiate(catObj);
+            SpawnAnimal(catObj);
+            SpawnAnimal(catObj);
         }
         if (squirrleExist)
         {
-            Instantiate(squirrleObj);
-            Instantiate(squirrleObj);
+            SpawnAnimal(squirrelObj);
+            SpawnAnimal(squirrelObj);
         }
     }
     // Update is called once per frame
     void Update()
     {
-
     }
+    void SpawnAnimal(GameObject animal)
+    {
+        Vector3 position = new Vector3(Random.Range(-10.0F, 10.0F),
+            2, Random.Range(-10.0F, 10.0F));
+        Instantiate(animal, position, Quaternion.identity);
+    }
+
 }

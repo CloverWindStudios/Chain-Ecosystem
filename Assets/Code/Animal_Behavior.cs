@@ -9,7 +9,6 @@ public class Animal_Behavior : MonoBehaviour
     public double hunger;
     public double thirst;
     public double health;
-    public double fear;
     private int priorityMove;
     private bool priorityCheck;
     // 1 = bunny, 2 = bird, 3 = cat, 4 = squirrle
@@ -37,7 +36,6 @@ public class Animal_Behavior : MonoBehaviour
         lifeCounter = 0.0f;
         hunger = 0.0;
         thirst = 0.0;
-        fear = 0.0;
         priorityCheck = true;
         if (type == 1)
         {
@@ -63,22 +61,44 @@ public class Animal_Behavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (herbavor)
+        {
 
+            if (!foundFood)
+            {
+                target = findTarget();
+            }
+            if (fear2())
+            {
+                Vector3 direction = (target.position - transform.position).normalized;
+                rb.MovePosition(transform.position + -direction * speed * Time.deltaTime);
+            }else if (target != null)
+             {
+                transform.LookAt(target);
+                        Vector3 direction = (target.position - transform.position).normalized;
+                        rb.MovePosition(transform.position + direction * speed * Time.deltaTime);
+             }
+            
+        }
+        else
+        { 
+            if (!foundFood)
+            {
+                target = findTarget();
+            }
+            else
+            {
+                if (target != null)
+                {
+                    transform.LookAt(target);
+                    Vector3 direction = (target.position - transform.position).normalized;
+                    rb.MovePosition(transform.position + direction * speed * Time.deltaTime);
+                }
+            }
+        }
 
         countingVariables();
 
-        if (!foundFood) {
-            target = findTarget();
-        }
-        else
-        {
-            if (target != null)
-            {
-                transform.LookAt(target);
-                Vector3 direction = (target.position - transform.position).normalized;
-                rb.MovePosition(transform.position + direction * speed * Time.deltaTime);
-            }
-        }
 
         if (lifeCounter >= 400)
         {
@@ -88,7 +108,7 @@ public class Animal_Behavior : MonoBehaviour
         {
             Destroy(self);
         }
-        if (hunger >= 100)
+        if (hunger >= 200)
         {
             Destroy(self);
         }
@@ -105,6 +125,24 @@ public class Animal_Behavior : MonoBehaviour
         GameObject[] candidates;
         if (herbavor)
         {
+            if (fear2())
+            {
+                candidates = GameObject.FindGameObjectsWithTag("cat");
+                float minDistance = Mathf.Infinity;
+                Transform closest;
+                if (candidates.Length == 0)
+                    return null;
+                closest = candidates[0].transform;
+                for (int i = 1; i < candidates.Length; ++i)
+                {
+                    float distance = (candidates[i].transform.position - transform.position).sqrMagnitude;
+                    if (distance < minDistance)
+                    {
+                        closest = candidates[i].transform;
+                        minDistance = distance;
+                    }
+                }
+            }
             if (thirst >= hunger)
             {
                 candidates = GameObject.FindGameObjectsWithTag("water");
@@ -231,6 +269,28 @@ public class Animal_Behavior : MonoBehaviour
                     break;
             }
         }
+    }
+
+    private bool fear2()
+    {
+        GameObject[] candidates;
+        candidates = GameObject.FindGameObjectsWithTag("cat");
+        float minDistance = Mathf.Infinity;
+        Transform closest;
+        closest = candidates[0].transform;
+        for (int i = 1; i < candidates.Length; ++i)
+        {
+            float distance = (candidates[i].transform.position - transform.position).sqrMagnitude;
+
+            if (distance < 50)
+            {
+                Debug.Log("ahhhhhhh");
+                return true;
+            }
+        }
+
+
+        return false;
     }
 }
 

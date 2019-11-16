@@ -402,6 +402,7 @@ GameObject:
   - component: {fileID: 54254021876192096}
   - component: {fileID: 65306087575105876}
   - component: {fileID: 95995790678533120}
+  - component: {fileID: 1759291405042355397}
   m_Layer: 0
   m_Name: Lion
   m_TagString: Untagged
@@ -478,6 +479,31 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1759291405042355397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1553991042791506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab91fa3a05311d243bcef3092976954a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  herbavor: 0
+  lifeTime: 0
+  hunger: 0
+  thirst: 0
+  health: 0
+  fear: 0
+  type: 0
+  lifeTimeWhole: 0
+  lifeTimeHalf: 0
+  speed: 2
+  rb: {fileID: 54254021876192096}
+  transform: {fileID: 4886101968738366}
+  self: {fileID: 1553991042791506}
 --- !u!1 &1559099344501894
 GameObject:
   m_ObjectHideFlags: 0

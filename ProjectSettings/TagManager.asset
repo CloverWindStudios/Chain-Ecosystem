@@ -9,6 +9,7 @@ TagManager:
   - prey
   - bunny
   - lion
+  - cat
   layers:
   - Default
   - TransparentFX
