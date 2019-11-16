@@ -18,6 +18,7 @@ public class Animal_Behavior : MonoBehaviour
     private float lifeTimeNumber;
     private bool wholeLife = false;
     private float lifeCounter;
+    private bool foundFood = false;
     //movement hunger = 1, thirst = 2, fear = 3
     private int priorityBehavior;
     public float speed = 1f;
@@ -62,12 +63,17 @@ public class Animal_Behavior : MonoBehaviour
         countingVariables();
         if (priority() == 1)
         {
-            target = findTarget();
-            if (target != null)
+            if (!foundFood) { 
+                 target = findTarget();
+            }
+            else
             {
-                transform.LookAt(target);
-                Vector3 direction = (target.position - transform.position).normalized;
-                rb.MovePosition(transform.position + direction * speed * Time.deltaTime);
+                if (target != null)
+                {
+                    transform.LookAt(target);
+                    Vector3 direction = (target.position - transform.position).normalized;
+                    rb.MovePosition(transform.position + direction * speed * Time.deltaTime);
+                }
             }
         }
 
@@ -75,11 +81,19 @@ public class Animal_Behavior : MonoBehaviour
         {
             Destroy(self);
         }
+        if (thirst >= 300)
+        {
+            Destroy(self);
+        }
+        if (hunger >= 300)
+        {
+            Destroy(self);
+        }
     }
     void countingVariables()
     {
         hunger += 0.1;
-        thirst += 0.2;
+        thirst += 0.01;
         lifeCounter += Time.deltaTime;
     }
     private int priority()
@@ -106,7 +120,7 @@ public class Animal_Behavior : MonoBehaviour
         GameObject[] candidates;
         if (herbavor)
         {
-            candidates = GameObject.FindGameObjectsWithTag("Grass");
+            candidates = GameObject.FindGameObjectsWithTag("plant");
         }
         else
         {
@@ -126,6 +140,19 @@ public class Animal_Behavior : MonoBehaviour
                 minDistance = distance;
             }
         }
+        foundFood = true;
         return closest;
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        switch (collision.gameObject.tag)
+        {
+            case "plant":
+                Destroy(collision.collider.gameObject);
+                hunger = 0;
+                foundFood = false;
+                break;
+        }
     }
 }
