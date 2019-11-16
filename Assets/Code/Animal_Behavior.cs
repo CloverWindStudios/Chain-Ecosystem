@@ -15,12 +15,12 @@ public class Animal_Behavior : MonoBehaviour
     //life time
     public double lifeTimeWhole;
     public double lifeTimeHalf;
-    private int lifeTimeNumber = Random.Range(1, 2);
+    private float lifeTimeNumber;
     private bool wholeLife = false;
-    private int lifeCounter;
+    private float lifeCounter;
     //movement hunger = 1, thirst = 2, fear = 3
     private int priorityBehavior;
-    public float speed = 1;
+    public float speed = 1f;
     private Transform target;
     public Rigidbody rb;
     public Transform transform;
@@ -30,6 +30,8 @@ public class Animal_Behavior : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        lifeTimeNumber = Random.Range(1f, 2f);
+        lifeCounter = 0.0f;
         hunger = 0.0;
         thirst = 0.0;
         fear = 0.0;
@@ -78,7 +80,7 @@ public class Animal_Behavior : MonoBehaviour
     {
         hunger += 0.1;
         thirst += 0.2;
-        lifeCounter += 1;
+        lifeCounter += Time.deltaTime;
     }
     private int priority()
     {

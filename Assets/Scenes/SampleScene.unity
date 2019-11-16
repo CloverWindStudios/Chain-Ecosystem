@@ -281,7 +281,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 50009488}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 51e387c64fd02364bb6ae8beccc300c5, type: 3}
+  m_Script: {fileID: 11500000, guid: ab91fa3a05311d243bcef3092976954a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   herbavor: 1
@@ -291,9 +291,9 @@ MonoBehaviour:
   health: 0
   fear: 0
   type: 0
-  lifeTimeWhole: 100
-  lifeTimeHalf: 50
-  speed: 1
+  lifeTimeWhole: 0
+  lifeTimeHalf: 0
+  speed: 0
   rb: {fileID: 50009490}
   transform: {fileID: 50009489}
   self: {fileID: 50009488}
