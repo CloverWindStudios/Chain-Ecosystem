@@ -10,8 +10,6 @@ public class NewBehaviourScript : MonoBehaviour
     public bool squirrleExist;
 
     public double respawnTime;
-    public double lifeTimeWhole;
-    public double lifeTimeHalf;
 
     public GameObject bunnyObj;
     public GameObject birdObj;
