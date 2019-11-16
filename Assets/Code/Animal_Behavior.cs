@@ -10,6 +10,8 @@ public class Animal_Behavior : MonoBehaviour
     public double thirst;
     public double health;
     public double fear;
+    private int priorityMove;
+    private bool priorityCheck;
     // 1 = bunny, 2 = bird, 3 = cat, 4 = squirrle
     public int type;
     //life time
@@ -36,6 +38,7 @@ public class Animal_Behavior : MonoBehaviour
         hunger = 0.0;
         thirst = 0.0;
         fear = 0.0;
+        priorityCheck = true;
         if (type == 1)
         {
             health = 20;
@@ -60,8 +63,13 @@ public class Animal_Behavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (priorityCheck)
+        {
+            priorityMove = priority();
+        }
+
         countingVariables();
-        if (priority() == 1)
+        if (priorityMove == 1 || priorityMove == 2)
         {
             if (!foundFood) { 
                  target = findTarget();
@@ -85,7 +93,7 @@ public class Animal_Behavior : MonoBehaviour
         {
             Destroy(self);
         }
-        if (hunger >= 300)
+        if (hunger >= 100)
         {
             Destroy(self);
         }
@@ -101,30 +109,38 @@ public class Animal_Behavior : MonoBehaviour
         if (hunger > thirst && hunger > fear)
         {
             priorityBehavior = 1;
+            priorityCheck = false;
+            Debug.Log("Hunger greater than thirst");
             return priorityBehavior;
         }
         else if (thirst > hunger && thirst > fear)
         {
             priorityBehavior = 2;
+            priorityCheck = false;
             return priorityBehavior;
         }
         else if (fear > hunger && fear > thirst)
         {
             priorityBehavior = 3;
+            priorityCheck = false;
             return priorityBehavior;
         }
+        priorityMove = priority();
         return 0;
     }
     public Transform findTarget()
     {
         GameObject[] candidates;
-        if (herbavor)
-        {
-            candidates = GameObject.FindGameObjectsWithTag("plant");
-        }
-        else
-        {
-            candidates = GameObject.FindGameObjectsWithTag("Animal");
+            if (herbavor)
+            {
+                candidates = GameObject.FindGameObjectsWithTag("plant");
+            }
+            else
+            {
+                candidates = GameObject.FindGameObjectsWithTag("Animal");
+            }
+        if (thirst >= hunger) {
+            candidates = GameObject.FindGameObjectsWithTag("water");
         }
         float minDistance = Mathf.Infinity;
         Transform closest;
@@ -152,7 +168,13 @@ public class Animal_Behavior : MonoBehaviour
                 Destroy(collision.collider.gameObject);
                 hunger = 0;
                 foundFood = false;
+                priorityCheck = true;
                 break;
+            case "water":
+                thirst = 0;
+                priorityCheck = true;
+                break;
+
         }
     }
 }
