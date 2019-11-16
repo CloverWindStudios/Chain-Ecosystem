@@ -6,6 +6,9 @@ TagManager:
   tags:
   - plant
   - water
+  - prey
+  - bunny
+  - lion
   layers:
   - Default
   - TransparentFX

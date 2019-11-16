@@ -63,25 +63,20 @@ public class Animal_Behavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (priorityCheck)
-        {
-            priorityMove = priority();
-        }
+
 
         countingVariables();
-        if (priorityMove == 1 || priorityMove == 2)
+
+        if (!foundFood) {
+            target = findTarget();
+        }
+        else
         {
-            if (!foundFood) { 
-                 target = findTarget();
-            }
-            else
+            if (target != null)
             {
-                if (target != null)
-                {
-                    transform.LookAt(target);
-                    Vector3 direction = (target.position - transform.position).normalized;
-                    rb.MovePosition(transform.position + direction * speed * Time.deltaTime);
-                }
+                transform.LookAt(target);
+                Vector3 direction = (target.position - transform.position).normalized;
+                rb.MovePosition(transform.position + direction * speed * Time.deltaTime);
             }
         }
 
@@ -101,80 +96,141 @@ public class Animal_Behavior : MonoBehaviour
     void countingVariables()
     {
         hunger += 0.1;
-        thirst += 0.01;
+        thirst += 0.12;
         lifeCounter += Time.deltaTime;
     }
-    private int priority()
-    {
-        if (hunger > thirst && hunger > fear)
-        {
-            priorityBehavior = 1;
-            priorityCheck = false;
-            Debug.Log("Hunger greater than thirst");
-            return priorityBehavior;
-        }
-        else if (thirst > hunger && thirst > fear)
-        {
-            priorityBehavior = 2;
-            priorityCheck = false;
-            return priorityBehavior;
-        }
-        else if (fear > hunger && fear > thirst)
-        {
-            priorityBehavior = 3;
-            priorityCheck = false;
-            return priorityBehavior;
-        }
-        priorityMove = priority();
-        return 0;
-    }
+
     public Transform findTarget()
     {
         GameObject[] candidates;
-            if (herbavor)
+        if (herbavor)
+        {
+            if (thirst >= hunger)
             {
-                candidates = GameObject.FindGameObjectsWithTag("plant");
+                candidates = GameObject.FindGameObjectsWithTag("water");
+                float minDistance = Mathf.Infinity;
+                Transform closest;
+                if (candidates.Length == 0)
+                    return null;
+                closest = candidates[0].transform;
+                for (int i = 1; i < candidates.Length; ++i)
+                {
+                    float distance = (candidates[i].transform.position - transform.position).sqrMagnitude;
+                    if (distance < minDistance)
+                    {
+                        closest = candidates[i].transform;
+                        minDistance = distance;
+                    }
+                }
+                foundFood = true;
+                return closest;
+
             }
             else
             {
-                candidates = GameObject.FindGameObjectsWithTag("Animal");
+                candidates = GameObject.FindGameObjectsWithTag("plant");
+                float minDistance = Mathf.Infinity;
+                Transform closest;
+                if (candidates.Length == 0)
+                    return null;
+                closest = candidates[0].transform;
+                for (int i = 1; i < candidates.Length; ++i)
+                {
+                    float distance = (candidates[i].transform.position - transform.position).sqrMagnitude;
+                    if (distance < minDistance)
+                    {
+                        closest = candidates[i].transform;
+                        minDistance = distance;
+                    }
+                }
+                foundFood = true;
+                return closest;
+
             }
-        if (thirst >= hunger) {
-            candidates = GameObject.FindGameObjectsWithTag("water");
         }
-        float minDistance = Mathf.Infinity;
-        Transform closest;
-        if (candidates.Length == 0)
-            return null;
-        closest = candidates[0].transform;
-        for (int i = 1; i < candidates.Length; ++i)
+        else
         {
-            float distance = (candidates[i].transform.position - transform.position).sqrMagnitude;
-            if (distance < minDistance)
+            if (thirst >= hunger)
             {
-                closest = candidates[i].transform;
-                minDistance = distance;
+                candidates = GameObject.FindGameObjectsWithTag("water");
+                float minDistance = Mathf.Infinity;
+                Transform closest;
+                if (candidates.Length == 0)
+                    return null;
+                closest = candidates[0].transform;
+                for (int i = 1; i < candidates.Length; ++i)
+                {
+                    float distance = (candidates[i].transform.position - transform.position).sqrMagnitude;
+                    if (distance < minDistance)
+                    {
+                        closest = candidates[i].transform;
+                        minDistance = distance;
+                    }
+                }
+                foundFood = true;
+                return closest;
+
+            }
+            else
+            {
+                candidates = GameObject.FindGameObjectsWithTag("bunny");
+                float minDistance = Mathf.Infinity;
+                Transform closest;
+                if (candidates.Length == 0)
+                    return null;
+                closest = candidates[0].transform;
+                for (int i = 1; i < candidates.Length; ++i)
+                {
+                    float distance = (candidates[i].transform.position - transform.position).sqrMagnitude;
+                    if (distance < minDistance)
+                    {
+                        closest = candidates[i].transform;
+                        minDistance = distance;
+                    }
+                }
+                foundFood = true;
+                return closest;
+
             }
         }
-        foundFood = true;
-        return closest;
-    }
+            return null;
+        }
+
+        
+    
 
     void OnCollisionEnter(Collision collision)
     {
-        switch (collision.gameObject.tag)
+        if (herbavor) {
+            switch (collision.gameObject.tag)
+            {
+                case "plant":
+                    Destroy(collision.collider.gameObject);
+                    hunger = 0;
+                    foundFood = false;
+                    break;
+                case "water":
+                    thirst = 0;
+                    foundFood = false;
+                    break;
+            }
+        }else
         {
-            case "plant":
-                Destroy(collision.collider.gameObject);
-                hunger = 0;
-                foundFood = false;
-                priorityCheck = true;
-                break;
-            case "water":
-                thirst = 0;
-                priorityCheck = true;
-                break;
+            switch (collision.gameObject.tag)
+            {
 
+                case "water":
+                    thirst = 0;
+                    foundFood = false;
+                    break;
+                case "bunny":
+                        Destroy(collision.collider.gameObject);
+                        hunger = 0;
+                        foundFood = false;
+                    
+                    break;
+            }
         }
     }
 }
+
