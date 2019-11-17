@@ -28,6 +28,9 @@ public class Animal_Behavior : MonoBehaviour
     public Transform transform;
     //self
     public GameObject self;
+    public AudioSource audioSource;
+    public AudioClip bunnyDeath;
+    //public ParticleSystem deathExplosion;
 
     // Start is called before the first frame update
     void Start()
@@ -37,6 +40,7 @@ public class Animal_Behavior : MonoBehaviour
         hunger = 0.0;
         thirst = 0.0;
         priorityCheck = true;
+        //deathExplosion.Pause();
         if (type == 1)
         {
             health = 20;
@@ -48,6 +52,7 @@ public class Animal_Behavior : MonoBehaviour
         else if (health == 3)
         {
             health = 30;
+            audioSource = GetComponent<AudioSource>();
         }
         else if (type == 4)
         {
@@ -102,14 +107,17 @@ public class Animal_Behavior : MonoBehaviour
 
         if (lifeCounter >= 400)
         {
+            //deathExplosion.Play();
             Destroy(self);
         }
         if (thirst >= 300)
         {
+            //deathExplosion.Play();
             Destroy(self);
         }
         if (hunger >= 200)
         {
+            //deathExplosion.Play();
             Destroy(self);
         }
     }
@@ -256,16 +264,16 @@ public class Animal_Behavior : MonoBehaviour
         {
             switch (collision.gameObject.tag)
             {
-
                 case "water":
                     thirst = 0;
                     foundFood = false;
                     break;
                 case "bunny":
+                        //deathExplosion.Play();
                         Destroy(collision.collider.gameObject);
                         hunger = 0;
                         foundFood = false;
-                    
+                        audioSource.PlayOneShot(bunnyDeath);
                     break;
             }
         }
